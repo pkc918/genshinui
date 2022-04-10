@@ -7,8 +7,9 @@ function App() {
       <header className="App-header">
         <Button> Hello World </Button>
         <Button btnType={ButtonType.Primary} size={ButtonSize.Large}> Primary+Large </Button>
-        <Button btnType={ButtonType.Danger} size={ButtonSize.Small}> Primary+Large </Button>
+        <Button btnType={ButtonType.Danger} size={ButtonSize.Small}> Primary+Small </Button>
         <Button btnType={ButtonType.Link} hrefLink="http://www.xxx.com"> Link </Button>
+        <Button btnType={ButtonType.Link} disabled hrefLink="http://www.xxx.com"> Link </Button>
         <hr/>
         <code>
           const a = 'blank'

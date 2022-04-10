@@ -33,7 +33,7 @@ const Button: React.FC<BaseButtonProps> = (props) => {
     hrefLink
   } = props;
 
-  const classes = classNames("btn", {
+  const classes = classNames("genshin-btn", {
     [`genshin-btn-${btnType}`]: btnType,
     [`genshin-btn-${size}`]: size,
     "disabled": (btnType === ButtonType.Link) && disabled
