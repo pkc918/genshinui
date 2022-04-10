@@ -1,7 +1,7 @@
 import React from "react";
 
 interface HelloProps {
-  message: string
+  message?: string
 }
 
 const Hello: React.FC<HelloProps> = ({message}) => {
