@@ -6,7 +6,13 @@ function App() {
     <div className="App">
       <header className="App-header">
         <Button> Hello World </Button>
-        <Button btnType={ButtonType.Primary} size={ButtonSize.Large}> Primary+Large </Button>
+        <Button
+          btnType={ButtonType.Primary}
+          size={ButtonSize.Large}
+          autoFocus
+          onClick={(e) => {e.preventDefault();
+            console.log(e);}}
+        > Primary+Large </Button>
         <Button disabled btnType={ButtonType.Primary} size={ButtonSize.Large}> Primary+Large </Button>
         <Button btnType={ButtonType.Danger} size={ButtonSize.Small}> Primary+Small </Button>
         <Button btnType={ButtonType.Link} hrefLink="http://www.xxx.com"> Link </Button>
