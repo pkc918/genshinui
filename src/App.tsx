@@ -1,14 +1,14 @@
 import React from "react";
-import "./App.css";
-// import Hello from "./components/Hello";
+import Button, {ButtonSize, ButtonType} from "./components/Button/button";
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>Hello world</h1>
-        <h1>Hello world</h1>
-        <h1>Hello world</h1>
+        <Button> Hello World </Button>
+        <Button btnType={ButtonType.Primary} size={ButtonSize.Large}> Primary+Large </Button>
+        <Button btnType={ButtonType.Danger} size={ButtonSize.Small}> Primary+Large </Button>
+        <Button btnType={ButtonType.Link} hrefLink="http://www.xxx.com"> Link </Button>
         <hr/>
         <code>
           const a = 'blank'
