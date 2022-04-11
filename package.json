@@ -42,7 +42,7 @@
     "rmrf": "rimraf ./dist",
     "buildts": "tsc -p tsconfig.build.json",
     "buildcss": "node-sass ./src/styles/index.scss ./dist/index.css",
-    "prepublish": "yarn building"
+    "prepublish": "yarn test:nowatch && yarn building"
   },
   "eslintConfig": {
     "extends": [
