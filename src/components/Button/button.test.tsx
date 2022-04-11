@@ -1,14 +1,14 @@
 import React from "react";
 import {fireEvent, render} from "@testing-library/react";
-import Button, {ButtonProps, ButtonSize, ButtonType} from "./button";
+import Button, {ButtonProps} from "./button";
 
 const defaultProps = {
   onClick: jest.fn()
 };
 
 const testProps: ButtonProps = {
-  btnType: ButtonType.Primary,
-  size: ButtonSize.Large,
+  btnType: "primary",
+  size: "lg",
   className: "genshin"
 };
 
@@ -35,7 +35,7 @@ describe("test Button component", () => {
     expect(element).toHaveClass("genshin genshin-btn-primary genshin-btn-lg");
   });
   it("should render a link when btnType equals link and href is provided", function () {
-    const wrapper = render(<Button btnType={ButtonType.Link} hrefLink="http://pkc.com">React</Button>);
+    const wrapper = render(<Button btnType="link" hrefLink="http://pkc.com">React</Button>);
     const element = wrapper.getByText("React");
     expect(element).toBeInTheDocument(); //是否在文档中
     expect(element.tagName).toEqual("A");
