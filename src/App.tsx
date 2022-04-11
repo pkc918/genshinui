@@ -1,5 +1,5 @@
 import React from "react";
-import Button, {ButtonSize, ButtonType} from "./components/Button/button";
+import Button from "./components/Button/button";
 
 function App() {
   return (
@@ -7,16 +7,16 @@ function App() {
       <header className="App-header">
         <Button> Hello World </Button>
         <Button
-          btnType={ButtonType.Primary}
-          size={ButtonSize.Large}
+          btnType="primary"
+          size="lg"
           autoFocus
           onClick={(e) => {e.preventDefault();
             console.log(e);}}
         > Primary+Large </Button>
-        <Button disabled btnType={ButtonType.Primary} size={ButtonSize.Large}> Primary+Large </Button>
-        <Button btnType={ButtonType.Danger} size={ButtonSize.Small}> Primary+Small </Button>
-        <Button btnType={ButtonType.Link} hrefLink="http://www.xxx.com"> Link </Button>
-        <Button btnType={ButtonType.Link} disabled hrefLink="http://www.xxx.com"> Link </Button>
+        <Button disabled btnType="primary" size="lg"> Primary+Large </Button>
+        <Button btnType="danger" size="lg"> Primary+Small </Button>
+        <Button btnType="link" hrefLink="http://www.xxx.com"> Link </Button>
+        <Button btnType="link" disabled hrefLink="http://www.xxx.com"> Link </Button>
         <hr/>
         <code>
           const a = 'blank'

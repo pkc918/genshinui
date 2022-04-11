@@ -2,17 +2,9 @@ import React from "react";
 import classNames from "classnames";
 
 // 创建枚举
-export enum ButtonSize {
-  Large = "lg",
-  Small = "sm",
-}
+export type ButtonSize = "lg" | "sm" | "df";
 
-export enum ButtonType {
-  Primary = "primary",
-  Default = "default",
-  Danger = "danger",
-  Link = "link"
-}
+export type ButtonType = "primary" | "default" | "danger" | "link"
 
 // 创建 props 接口
 interface BaseButtonProps {
@@ -46,9 +38,9 @@ const Button: React.FC<ButtonProps> = (props) => {
   const classes = classNames("genshin-btn", className, {
     [`genshin-btn-${btnType}`]: btnType,
     [`genshin-btn-${size}`]: size,
-    "disabled": (btnType === ButtonType.Link) && disabled
+    "disabled": (btnType === "link") && disabled
   });
-  if (btnType === ButtonType.Link && hrefLink) {
+  if (btnType === "link" && hrefLink) {
     return (
       <a
         className={classes}
@@ -75,7 +67,7 @@ const Button: React.FC<ButtonProps> = (props) => {
 // 默认 props
 Button.defaultProps = {
   disabled: false,
-  btnType: ButtonType.Default
+  btnType: "default"
 };
 
 export default Button;
