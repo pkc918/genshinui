@@ -30,13 +30,13 @@ describe("test Button component", () => {
   });
   it("should render the correct component based on different props", function () {
     const wrapper = render(<Button {...testProps} >React</Button>);
-    const element = wrapper.getByText("React");
+    const element = wrapper.getByText("React") as HTMLButtonElement;
     expect(element).toBeInTheDocument(); //是否在文档中
     expect(element).toHaveClass("genshin genshin-btn-primary genshin-btn-lg");
   });
   it("should render a link when btnType equals link and href is provided", function () {
     const wrapper = render(<Button btnType="link" hrefLink="http://pkc.com">React</Button>);
-    const element = wrapper.getByText("React");
+    const element = wrapper.getByText("React") as HTMLAreaElement;
     expect(element).toBeInTheDocument(); //是否在文档中
     expect(element.tagName).toEqual("A");
     expect(element).toHaveClass("genshin-btn genshin-btn-link");
