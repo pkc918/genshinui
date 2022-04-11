@@ -2,6 +2,9 @@
   "name": "genshinui",
   "version": "0.1.0",
   "private": true,
+  "main": "build/index.js",
+  "module": "build/index.js",
+  "types": "build/index.d.ts",
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.2",
     "@testing-library/react": "^12.1.4",
@@ -22,12 +25,34 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "building": "yarn rmrf && yarn buildts && yarn buildcss",
+    "rmrf": "rimraf ./build",
+    "buildts": "tsc -p tsconfig.build.json",
+    "buildcss": "node-sass ./src/styles/index.scss ./build/index.css"
   },
   "eslintConfig": {
     "extends": [
       "react-app",
       "react-app/jest"
+    ],
+    "overrides": [
+      {
+        "files": [
+          "**/*.stories.*"
+        ],
+        "rules": {
+          "import/no-anonymous-default-export": "off"
+        }
+      },
+      {
+        "files": [
+          "**/*.stories.*"
+        ],
+        "rules": {
+          "import/no-anonymous-default-export": "off"
+        }
+      }
     ]
   },
   "browserslist": {
@@ -42,5 +67,7 @@
       "last 1 safari version"
     ]
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "rimraf": "^3.0.2"
+  }
 }
