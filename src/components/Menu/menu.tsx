@@ -4,25 +4,25 @@ import {MenuItemProps} from "./menuItem";
 
 // 组件的展示方向
 type MenuMode = "horizontal" | "vertical"
-type SelectCallback = (selectedIndex: number) => void;
+type SelectCallback = (selectedIndex: string) => void;
 
 // MenuProps
 export interface MenuProps {
-  defaultIndex?: number; // 默认选中的item
+  defaultIndex?: string; // 默认选中的item
   className?: string; // 类名
   mode?: MenuMode; // 展示方向
   style?: React.CSSProperties; // 样式
-  onSelect?: (selectedIndex: number) => void; // select 方法
+  onSelect?: (selectedIndex: string) => void; // select 方法
 }
 
 // 使用 useContext 作为组件间的传值
 interface IMenuContext {
-  index: number;
+  index: string;
   onSelect?: SelectCallback;
   mode?: MenuMode;
 }
 
-export const MenuContext = createContext<IMenuContext>({index: 0});
+export const MenuContext = createContext<IMenuContext>({index: "0"});
 
 const Menu: React.FC<MenuProps> = (props) => {
   const {className, mode, style, children, defaultIndex, onSelect} = props;
@@ -32,7 +32,7 @@ const Menu: React.FC<MenuProps> = (props) => {
     "menu-horizontal": mode !== "vertical"
   });
   // onSelect 的回调函数
-  const handleClick = (index: number) => {
+  const handleClick = (index: string) => {
     setActive(index);
     if (onSelect) {
       onSelect(index);
@@ -40,7 +40,7 @@ const Menu: React.FC<MenuProps> = (props) => {
   };
   // Context 需要传递出去的参数
   const passedContext: IMenuContext = {
-    index: currentActive ? currentActive : 0,
+    index: currentActive ? currentActive : "0",
     onSelect: handleClick,
     mode: mode
   };
@@ -50,7 +50,7 @@ const Menu: React.FC<MenuProps> = (props) => {
       const {displayName} = childElement.type;
       if (displayName === "MenuItem" || displayName === "SubMenu") {
         return React.cloneElement(childElement, {
-          index
+          index: `${index}`
         });
       } else {
         console.error("Warning: Menu's children is only MenuItem component");
@@ -67,7 +67,7 @@ const Menu: React.FC<MenuProps> = (props) => {
 };
 
 Menu.defaultProps = {
-  defaultIndex: 0,
+  defaultIndex: "0",
   mode: "horizontal"
 };
 
