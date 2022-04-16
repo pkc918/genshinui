@@ -1,5 +1,6 @@
 import React, {createContext, useState} from "react";
 import classNames from "classnames";
+import {MenuItemProps} from "./menuItem";
 
 // 组件的展示方向
 type MenuMode = "horizontal" | "vertical"
@@ -40,11 +41,23 @@ const Menu: React.FC<MenuProps> = (props) => {
     index: currentActive ? currentActive : 0,
     onSelect: handleClick
   };
-
+  const renderChildren = () => {
+    return React.Children.map(children, (child, index) => {
+      const childElement = child as React.FunctionComponentElement<MenuItemProps>;
+      const {displayName} = childElement.type;
+      if (displayName === "MenuItem") {
+        return React.cloneElement(childElement, {
+          index
+        });
+      } else {
+        console.error("Warning: Menu's children is only MenuItem component");
+      }
+    });
+  };
   return (
     <ul className={classes} style={style} data-testid="test-menu">
       <MenuContext.Provider value={passedContext}>
-        {children}
+        {renderChildren()}
       </MenuContext.Provider>
     </ul>
   );
