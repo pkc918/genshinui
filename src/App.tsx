@@ -2,16 +2,22 @@ import React from "react";
 import Button from "./components/Button/button";
 import Menu from "./components/Menu/menu";
 import MenuItem from "./components/Menu/menuItem";
+import SubMenu from "./components/Menu/subMenu";
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
         <Menu mode={"vertical"} defaultIndex={0} onSelect={(index) => {alert(index);}}>
-          <MenuItem index={0}>123</MenuItem>
-          <MenuItem index={1}>123</MenuItem>
-          <MenuItem index={2}>123</MenuItem>
-          <MenuItem index={3}>123</MenuItem>
+          <MenuItem>123</MenuItem>
+          <MenuItem>123</MenuItem>
+          <SubMenu title={"hahaha"}>
+            <MenuItem>123</MenuItem>
+            <MenuItem>123</MenuItem>
+            <MenuItem>123</MenuItem>
+          </SubMenu>
+          <MenuItem>123</MenuItem>
+          <MenuItem>123</MenuItem>
         </Menu>
 
 
