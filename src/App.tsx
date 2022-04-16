@@ -7,11 +7,11 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <Menu>
-          <MenuItem>123</MenuItem>
-          <MenuItem>123</MenuItem>
-          <MenuItem>123</MenuItem>
-          <MenuItem>123</MenuItem>
+        <Menu mode={"vertical"} defaultIndex={0} onSelect={(index) => {alert(index);}}>
+          <MenuItem index={0}>123</MenuItem>
+          <MenuItem index={1}>123</MenuItem>
+          <MenuItem index={2}>123</MenuItem>
+          <MenuItem index={3}>123</MenuItem>
         </Menu>
 
 
@@ -20,8 +20,10 @@ function App() {
           btnType="primary"
           size="lg"
           autoFocus
-          onClick={(e) => {e.preventDefault();
-            console.log(e);}}
+          onClick={(e) => {
+            e.preventDefault();
+            console.log(e);
+          }}
         > Primary+Large </Button>
         <Button disabled btnType="primary" size="lg"> Primary+Large </Button>
         <Button btnType="danger" size="lg"> Primary+Small </Button>
