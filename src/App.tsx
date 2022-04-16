@@ -1,10 +1,20 @@
 import React from "react";
 import Button from "./components/Button/button";
+import Menu from "./components/Menu/menu";
+import MenuItem from "./components/Menu/menuItem";
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
+        <Menu>
+          <MenuItem>123</MenuItem>
+          <MenuItem>123</MenuItem>
+          <MenuItem>123</MenuItem>
+          <MenuItem>123</MenuItem>
+        </Menu>
+
+
         <Button> Hello World </Button>
         <Button
           btnType="primary"
