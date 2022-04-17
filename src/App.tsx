@@ -5,9 +5,9 @@ import MenuItem from "./components/Menu/menuItem";
 import SubMenu from "./components/Menu/subMenu";
 import Icon from "./components/Icon/icon";
 import {library} from "@fortawesome/fontawesome-svg-core";
-import {faCoffee} from "@fortawesome/free-solid-svg-icons";
+import {fas} from "@fortawesome/free-solid-svg-icons";
 
-library.add(faCoffee);
+library.add(fas);
 
 function App() {
   return (
@@ -15,7 +15,7 @@ function App() {
       <header className="App-header">
         <Icon icon={"coffee"} theme={"primary"} />
 
-        <Menu mode={"vertical"} defaultOpenSubMenus={["2"]} defaultIndex={"0"} onSelect={(index) => {alert(index);}}>
+        <Menu mode={"horizontal"} defaultOpenSubMenus={["2"]} defaultIndex={"0"} onSelect={(index) => {alert(index);}}>
           <MenuItem>123</MenuItem>
           <MenuItem>123</MenuItem>
           <SubMenu title={"hahaha"}>
