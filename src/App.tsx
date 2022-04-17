@@ -13,7 +13,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <Icon icon={"coffee"}/>
+        <Icon icon={"coffee"} theme={"primary"} />
 
         <Menu mode={"vertical"} defaultOpenSubMenus={["2"]} defaultIndex={"0"} onSelect={(index) => {alert(index);}}>
           <MenuItem>123</MenuItem>
