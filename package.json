@@ -23,6 +23,9 @@
     "dist"
   ],
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.1.1",
+    "@fortawesome/free-solid-svg-icons": "^6.1.1",
+    "@fortawesome/react-fontawesome": "^0.1.18",
     "@testing-library/jest-dom": "^5.16.2",
     "@testing-library/react": "^12.1.4",
     "@testing-library/user-event": "^13.5.0",
@@ -38,11 +41,11 @@
     "test": "react-scripts test",
     "test:nowatch": "cross-env CI=true react-scripts test",
     "eject": "react-scripts eject",
-    "building": "yarn rmrf && yarn buildts && yarn buildcss",
+    "build": "yarn rmrf && yarn buildts && yarn buildcss",
     "rmrf": "rimraf ./dist",
     "buildts": "tsc -p tsconfig.build.json",
     "buildcss": "node-sass ./src/styles/index.scss ./dist/index.css",
-    "prepublish": "yarn test:nowatch && yarn building"
+    "prepublish": "yarn test:nowatch && yarn build"
   },
   "eslintConfig": {
     "extends": [
