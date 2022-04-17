@@ -13,11 +13,11 @@ const SubMenu: React.FC<SubMenuProps> = (props) => {
   const {index, children, title, className} = props;
   const context = useContext(MenuContext);
   const openedSubMenus = context.defaultOpenSubMenus as Array<string>;
-  const isOpend = (index && context.mode === "vertical") ? openedSubMenus.includes(index) : false;
-  const [menuOpen, setOpen] = useState(isOpend);
+  const isOpened = (index && context.mode === "vertical") ? openedSubMenus.includes(index) : false;
+  const [menuOpen, setOpen] = useState(isOpened);
 
   const classes = classNames("menu-item submenu-item", className, {
-    "is-active": context.index === index
+    "is-active": context.index === index,
   });
 
   // 点击切换展示隐藏
@@ -72,7 +72,11 @@ const SubMenu: React.FC<SubMenuProps> = (props) => {
 
 
   return (
-    <li key={index} className={classes} {...hoverEvents}>
+    <li
+      key={index}
+      className={classes}
+      onMouseEnter={hoverEvents.onMouseEnter}
+      onMouseLeave={hoverEvents.onMouseLeave}>
       <div className="submenu-title" {...clickEvents}>
         {title}
       </div>
