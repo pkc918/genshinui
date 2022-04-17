@@ -19,6 +19,8 @@ const SubMenu: React.FC<SubMenuProps> = (props) => {
 
   const classes = classNames("menu-item submenu-item", className, {
     "is-active": context.index === index,
+    "is-opened": menuOpen,
+    "is-vertical": context.mode === "vertical"
   });
 
   // 点击切换展示隐藏
