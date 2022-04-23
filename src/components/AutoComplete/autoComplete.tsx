@@ -1,15 +1,22 @@
-import React, {ChangeEvent, useState} from "react";
+import React, {ChangeEvent, ReactElement, useState} from "react";
 import Input, {InputProps} from "../Input/input";
 
+interface DataSourceObject {
+  value: string;
+}
+
+export type DataSourceType<T = {}> = T & DataSourceObject;
+
 export interface AutoCompleteProps extends Omit<InputProps, "onSelect"> {
-  fetchSuggestions: (str: string) => string[]; // 处理要展示的数据
-  onSelect?: (item: string) => void; // 选择事件
+  fetchSuggestions: (str: string) => DataSourceType[]; // 处理要展示的数据
+  onSelect?: (item: DataSourceType) => void; // 选择事件
+  renderOption?: (item: DataSourceType) => ReactElement; // 自定义渲染模板
 }
 
 const AutoComplete: React.FC<AutoCompleteProps> = (props) => {
-  const {fetchSuggestions, onSelect, value, ...restProps} = props;
+  const {fetchSuggestions, onSelect, value, renderOption, ...restProps} = props;
   const [inputValue, setInputValue] = useState(value);
-  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [suggestions, setSuggestions] = useState<DataSourceType[]>([]);
   // 输入框输入时执行
   // 输入框有值时，suggestions 设置成对应的提示值
   // 输入框没有值时，suggestions 为 空数组
@@ -23,10 +30,13 @@ const AutoComplete: React.FC<AutoCompleteProps> = (props) => {
       setSuggestions([]);
     }
   };
-  const handleSelect = (item: string) => {
-    setInputValue(item); // input 框内容填充为选择的内容
+  const handleSelect = (item: DataSourceType) => {
+    setInputValue(item.value); // input 框内容填充为选择的内容
     setSuggestions([]); // 将下方选择内容清空
     onSelect?.(item); // 将内容传递给用户
+  };
+  const renderTemplate = (item: DataSourceType) => {
+    return renderOption ? renderOption(item) : item.value;
   };
   const generateDropdown = () => {
     return (
@@ -34,7 +44,7 @@ const AutoComplete: React.FC<AutoCompleteProps> = (props) => {
         {suggestions.map((item, index) => {
           return (
             <li key={index} onClick={() => handleSelect(item)}>
-              {item}
+              {renderTemplate(item)}
             </li>
           );
         })}

@@ -7,18 +7,40 @@ import Icon from "./components/Icon/icon";
 import {library} from "@fortawesome/fontawesome-svg-core";
 import {fas} from "@fortawesome/free-solid-svg-icons";
 import Input from "./components/Input/input";
-import AutoComplete from "./components/AutoComplete/autoComplete";
+import AutoComplete, {DataSourceType} from "./components/AutoComplete/autoComplete";
 
 library.add(fas);
 
+interface LakerType {
+  value: string;
+}
+
 function App() {
-  const arr = ["aaa", "aa", "a", "bbb", "bb", "b"];
+
+  // const arr = ["aaa", "aa", "a", "bbb", "bb", "b"];
+  const renderOption = (item: DataSourceType<LakerType>) => {
+    return (
+      <h1>{item.value}</h1>
+    );
+  };
+  const lakers = [
+    {value: "aaa"},
+    {value: "aa"},
+    {value: "a"},
+    {value: "bbb"},
+    {value: "bb"},
+    {value: "b"},
+  ];
+  const handleFetch = (query: string) => {
+    return lakers.filter(item => item.value.includes(query)).map(v => ({value: v.value}));
+  };
   return (
     <div className="App">
       <header className="App-header">
         <AutoComplete
+          renderOption={renderOption}
           onSelect={(item) => console.log(item)}
-          fetchSuggestions={(query: string) => arr.filter(item => item.includes(query))}/>
+          fetchSuggestions={handleFetch}/>
 
 
         <Input icon={"face-angry"} prepend={"hahaha"} onChange={(e) => console.log(e.currentTarget.value)}/>
