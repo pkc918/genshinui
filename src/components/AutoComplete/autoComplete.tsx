@@ -23,13 +23,17 @@ const AutoComplete: React.FC<AutoCompleteProps> = (props) => {
       setSuggestions([]);
     }
   };
-
+  const handleSelect = (item: string) => {
+    setInputValue(item); // input 框内容填充为选择的内容
+    setSuggestions([]); // 将下方选择内容清空
+    onSelect?.(item); // 将内容传递给用户
+  };
   const generateDropdown = () => {
     return (
       <ul>
         {suggestions.map((item, index) => {
           return (
-            <li key={index}>
+            <li key={index} onClick={() => handleSelect(item)}>
               {item}
             </li>
           );

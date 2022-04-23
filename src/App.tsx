@@ -16,7 +16,9 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <AutoComplete fetchSuggestions={(query: string) => arr.filter(item => item.includes(query))}/>
+        <AutoComplete
+          onSelect={(item) => console.log(item)}
+          fetchSuggestions={(query: string) => arr.filter(item => item.includes(query))}/>
 
 
         <Input icon={"face-angry"} prepend={"hahaha"} onChange={(e) => console.log(e.currentTarget.value)}/>
