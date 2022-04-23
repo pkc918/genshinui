@@ -26,6 +26,18 @@ const Input: React.FC<InputProps> = (props) => {
     "input-group-append": !!append,
     "input-group-prepend": !!prepend
   });
+  // 处理 value 属性
+  const fixControlledValue = (value: any) => {
+    if (typeof value === "undefined" || value === null) {
+      return "";
+    }
+    return value;
+  };
+
+  if ("value" in props) {
+    delete restProps.defaultValue;
+    restProps.value = fixControlledValue(props.value);
+  }
   return (
     // 根据属性判断添加特定的节点
     <div className={classes} style={style}>
