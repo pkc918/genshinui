@@ -7,16 +7,21 @@ import Icon from "./components/Icon/icon";
 import {library} from "@fortawesome/fontawesome-svg-core";
 import {fas} from "@fortawesome/free-solid-svg-icons";
 import Input from "./components/Input/input";
+import AutoComplete from "./components/AutoComplete/autoComplete";
 
 library.add(fas);
 
 function App() {
+  const arr = ["aaa", "aa", "a", "bbb", "bb", "b"];
   return (
     <div className="App">
       <header className="App-header">
-        <Input icon={"face-angry"} prepend={"hahaha"}  onChange={(e) => console.log(e.currentTarget.value)} />
+        <AutoComplete fetchSuggestions={(query: string) => arr.filter(item => item.includes(query))}/>
 
-        <Icon icon={"coffee"} theme={"primary"} />
+
+        <Input icon={"face-angry"} prepend={"hahaha"} onChange={(e) => console.log(e.currentTarget.value)}/>
+
+        <Icon icon={"coffee"} theme={"primary"}/>
 
         <Menu mode={"horizontal"} defaultOpenSubMenus={["2"]} defaultIndex={"0"} onSelect={(index) => {alert(index);}}>
           <MenuItem>123</MenuItem>
