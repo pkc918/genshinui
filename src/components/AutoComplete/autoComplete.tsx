@@ -1,5 +1,6 @@
 import React, {ChangeEvent, ReactElement, useState} from "react";
 import Input, {InputProps} from "../Input/input";
+import Icon from "../Icon";
 
 interface DataSourceObject {
   value: string;
@@ -8,7 +9,7 @@ interface DataSourceObject {
 export type DataSourceType<T = {}> = T & DataSourceObject;
 
 export interface AutoCompleteProps extends Omit<InputProps, "onSelect"> {
-  fetchSuggestions: (str: string) => DataSourceType[]; // 处理要展示的数据
+  fetchSuggestions: (str: string) => DataSourceType[] | Promise<DataSourceType[]>; // 处理要展示的数据
   onSelect?: (item: DataSourceType) => void; // 选择事件
   renderOption?: (item: DataSourceType) => ReactElement; // 自定义渲染模板
 }
@@ -17,6 +18,7 @@ const AutoComplete: React.FC<AutoCompleteProps> = (props) => {
   const {fetchSuggestions, onSelect, value, renderOption, ...restProps} = props;
   const [inputValue, setInputValue] = useState(value);
   const [suggestions, setSuggestions] = useState<DataSourceType[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
   // 输入框输入时执行
   // 输入框有值时，suggestions 设置成对应的提示值
   // 输入框没有值时，suggestions 为 空数组
@@ -25,7 +27,17 @@ const AutoComplete: React.FC<AutoCompleteProps> = (props) => {
     setInputValue(value);
     if (value) {
       const results = fetchSuggestions(value);
-      setSuggestions(results);
+      // 支持异步
+      if (results instanceof Promise) {
+        console.log("triggered");
+        setLoading(true);
+        results.then(data => {
+          setLoading(false);
+          setSuggestions(data);
+        });
+      } else {
+        setSuggestions(results);
+      }
     } else {
       setSuggestions([]);
     }
@@ -59,6 +71,7 @@ const AutoComplete: React.FC<AutoCompleteProps> = (props) => {
         onChange={handleChange}
         {...restProps}
       />
+      {loading && <ul><Icon icon={"spinner"} spin/></ul>}
       {(suggestions.length > 0) && generateDropdown()}
     </div>
   );
