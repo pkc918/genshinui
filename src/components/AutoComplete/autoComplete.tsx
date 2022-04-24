@@ -1,6 +1,7 @@
-import React, {ChangeEvent, ReactElement, useState} from "react";
+import React, {ChangeEvent, ReactElement, useEffect, useState} from "react";
 import Input, {InputProps} from "../Input/input";
 import Icon from "../Icon";
+import useDebounce from "../../hooks/useDebounce";
 
 interface DataSourceObject {
   value: string;
@@ -16,17 +17,14 @@ export interface AutoCompleteProps extends Omit<InputProps, "onSelect"> {
 
 const AutoComplete: React.FC<AutoCompleteProps> = (props) => {
   const {fetchSuggestions, onSelect, value, renderOption, ...restProps} = props;
-  const [inputValue, setInputValue] = useState(value);
+  const [inputValue, setInputValue] = useState<string>(value as string);
   const [suggestions, setSuggestions] = useState<DataSourceType[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  // 输入框输入时执行
-  // 输入框有值时，suggestions 设置成对应的提示值
-  // 输入框没有值时，suggestions 为 空数组
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.trim();
-    setInputValue(value);
-    if (value) {
-      const results = fetchSuggestions(value);
+  // 自定义 hooks， 使用 useEffect 防抖
+  const debouncedValue = useDebounce(inputValue, 500);
+  useEffect(() => {
+    if (debouncedValue) {
+      const results = fetchSuggestions(inputValue);
       // 支持异步
       if (results instanceof Promise) {
         console.log("triggered");
@@ -41,6 +39,14 @@ const AutoComplete: React.FC<AutoCompleteProps> = (props) => {
     } else {
       setSuggestions([]);
     }
+  }, [debouncedValue]);
+  // 输入框输入时执行
+  // 输入框有值时，suggestions 设置成对应的提示值
+  // 输入框没有值时，suggestions 为 空数组
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.trim();
+    setInputValue(value);
+
   };
   const handleSelect = (item: DataSourceType) => {
     setInputValue(item.value); // input 框内容填充为选择的内容
