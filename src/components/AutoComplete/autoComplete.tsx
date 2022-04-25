@@ -4,6 +4,7 @@ import Icon from "../Icon";
 import useDebounce from "../../hooks/useDebounce";
 import classNames from "classnames";
 import useClickOutside from "../../hooks/useClickOutside";
+import Transition from "../Transition/transition";
 
 interface DataSourceObject {
   value: string;
@@ -29,6 +30,7 @@ const AutoComplete: React.FC<AutoCompleteProps> = (props) => {
   const componentRef = useRef<HTMLDivElement>(null); // 控制搜索栏隐藏
   // 自定义 hooks， 使用 useEffect 防抖
   const debouncedValue = useDebounce(inputValue, 500);
+  const [showDropdown, setShowDropdown] = useState(false);
   // 点击别处，隐藏选择栏
   useClickOutside(componentRef, () => {
     setSuggestions([]);
@@ -43,6 +45,9 @@ const AutoComplete: React.FC<AutoCompleteProps> = (props) => {
         results.then(data => {
           setLoading(false);
           setSuggestions(data);
+          if (data.length > 0) {
+            setShowDropdown(true);
+          }
         });
       } else {
         setSuggestions(results);
@@ -54,6 +59,7 @@ const AutoComplete: React.FC<AutoCompleteProps> = (props) => {
     setHighlightIndex(-1);
   }, [debouncedValue]);
   const highlight = (index: number) => {
+    console.log(index, "highlight index");
     if (index < 0) {
       index = 0;
     }
@@ -81,7 +87,8 @@ const AutoComplete: React.FC<AutoCompleteProps> = (props) => {
         break;
       case 27:
         // Esc 关闭搜索结果栏
-        setSuggestions([]);
+        console.log("esc");
+        setShowDropdown(false);
         break;
       default:
         break;
@@ -107,23 +114,28 @@ const AutoComplete: React.FC<AutoCompleteProps> = (props) => {
   };
   const generateDropdown = () => {
     return (
-      <ul>
-        {suggestions.map((item, index) => {
-          const cnames = classNames("suggestion-item", {
-            "item-highlighted": index === highlightIndex
-          });
-          return (
-            <li key={index} className={cnames} onClick={() => handleSelect(item)}>
-              {renderTemplate(item)}
-            </li>
-          );
-        })}
-      </ul>
+      <Transition in={showDropdown || loading}
+                  animation="zoom-in-top"
+                  timeout={300}
+                  onExited={() => {setSuggestions([]);}}>
+        <ul className="genshin-suggestion-list">
+          {suggestions.map((item, index) => {
+            const cnames = classNames("suggestion-item", {
+              "is-active": index === highlightIndex
+            });
+            return (
+              <li key={index} className={cnames} onClick={() => handleSelect(item)}>
+                {renderTemplate(item)}
+              </li>
+            );
+          })}
+        </ul>
+      </Transition>
     );
   };
 
   return (
-    <div className={"genshin-auto-complete"} ref={componentRef}>
+    <div className="genshin-auto-complete" ref={componentRef}>
       <Input
         value={inputValue}
         onChange={handleChange}
