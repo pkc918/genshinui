@@ -68,31 +68,57 @@ const AutoComplete: React.FC<AutoCompleteProps> = (props) => {
     }
     setHighlightIndex(index);
   };
+  // 选中事件
+  const handleSelect = (item: DataSourceType) => {
+    setInputValue(item.value); // input 框内容填充为选择的内容
+    setSuggestions([]); // 将下方选择内容清空
+    onSelect?.(item); // 将内容传递给用户
+    triggerSearch.current = false;
+  };
+  type HandleKeyBoard = {
+    [key: string]: () => void;
+  }
+  // 表驱动编程
+  const HashKeyCodeHandle: HandleKeyBoard = {
+    // Enter 键选中当前的 item
+    13: () => suggestions[highlightIndex] && handleSelect(suggestions[highlightIndex]),
+    // ↑ 键盘选中高亮item
+    38: () => highlight(highlightIndex - 1),
+    // ↓ 键盘选中高亮item
+    40: () => highlight(highlightIndex + 1),
+    // Esc 关闭搜索结果栏
+    27: () => {
+      console.log("esc");
+      setShowDropdown(false);
+    }
+  };
+  // 键盘事件
   const handleKeyDown = ({keyCode}: KeyboardEvent<HTMLInputElement>) => {
     console.log("keyboard", keyCode);
-    switch (keyCode) {
-      case 13:
-        // Enter 键选中当前的 item
-        if (suggestions[highlightIndex]) {
-          handleSelect(suggestions[highlightIndex]);
-        }
-        break;
-      case 38:
-        // ↑ 键盘选中高亮item
-        highlight(highlightIndex - 1);
-        break;
-      case 40:
-        // ↓ 键盘选中高亮item
-        highlight(highlightIndex + 1);
-        break;
-      case 27:
-        // Esc 关闭搜索结果栏
-        console.log("esc");
-        setShowDropdown(false);
-        break;
-      default:
-        break;
-    }
+    HashKeyCodeHandle[keyCode]?.();
+    // switch (keyCode) {
+    //   case 13:
+    //     // Enter 键选中当前的 item
+    //     if (suggestions[highlightIndex]) {
+    //       handleSelect(suggestions[highlightIndex]);
+    //     }
+    //     break;
+    //   case 38:
+    //     // ↑ 键盘选中高亮item
+    //     highlight(highlightIndex - 1);
+    //     break;
+    //   case 40:
+    //     // ↓ 键盘选中高亮item
+    //     highlight(highlightIndex + 1);
+    //     break;
+    //   case 27:
+    //     // Esc 关闭搜索结果栏
+    //     console.log("esc");
+    //     setShowDropdown(false);
+    //     break;
+    //   default:
+    //     break;
+    // }
   };
   // 输入框输入时执行
   // 输入框有值时，suggestions 设置成对应的提示值
@@ -102,12 +128,6 @@ const AutoComplete: React.FC<AutoCompleteProps> = (props) => {
     setInputValue(value);
     triggerSearch.current = true;
 
-  };
-  const handleSelect = (item: DataSourceType) => {
-    setInputValue(item.value); // input 框内容填充为选择的内容
-    setSuggestions([]); // 将下方选择内容清空
-    onSelect?.(item); // 将内容传递给用户
-    triggerSearch.current = false;
   };
   const renderTemplate = (item: DataSourceType) => {
     return renderOption ? renderOption(item) : item.value;
