@@ -1,7 +1,8 @@
-import React, {ChangeEvent, ReactElement, useEffect, useState} from "react";
+import React, {ChangeEvent, ReactElement, useEffect, useState, KeyboardEvent} from "react";
 import Input, {InputProps} from "../Input/input";
 import Icon from "../Icon";
 import useDebounce from "../../hooks/useDebounce";
+import classNames from "classnames";
 
 interface DataSourceObject {
   value: string;
@@ -20,6 +21,7 @@ const AutoComplete: React.FC<AutoCompleteProps> = (props) => {
   const [inputValue, setInputValue] = useState<string>(value as string);
   const [suggestions, setSuggestions] = useState<DataSourceType[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [highlightIndex, setHighlightIndex] = useState(-1);
   // 自定义 hooks， 使用 useEffect 防抖
   const debouncedValue = useDebounce(inputValue, 500);
   useEffect(() => {
@@ -39,7 +41,43 @@ const AutoComplete: React.FC<AutoCompleteProps> = (props) => {
     } else {
       setSuggestions([]);
     }
+    // 重置高亮
+    setHighlightIndex(-1);
   }, [debouncedValue]);
+  const highlight = (index: number) => {
+    if (index < 0) {
+      index = 0;
+    }
+    if (index >= suggestions.length) {
+      index = suggestions.length - 1;
+    }
+    setHighlightIndex(index);
+  };
+  const handleKeyDown = ({keyCode}: KeyboardEvent<HTMLInputElement>) => {
+    console.log("keyboard", keyCode);
+    switch (keyCode) {
+      case 13:
+        // Enter 键选中当前的 item
+        if (suggestions[highlightIndex]) {
+          handleSelect(suggestions[highlightIndex]);
+        }
+        break;
+      case 38:
+        // ↑ 键盘选中高亮item
+        highlight(highlightIndex - 1);
+        break;
+      case 40:
+        // ↓ 键盘选中高亮item
+        highlight(highlightIndex + 1);
+        break;
+      case 27:
+        // Esc 关闭搜索结果栏
+        setSuggestions([]);
+        break;
+      default:
+        break;
+    }
+  };
   // 输入框输入时执行
   // 输入框有值时，suggestions 设置成对应的提示值
   // 输入框没有值时，suggestions 为 空数组
@@ -60,8 +98,11 @@ const AutoComplete: React.FC<AutoCompleteProps> = (props) => {
     return (
       <ul>
         {suggestions.map((item, index) => {
+          const cnames = classNames("suggestion-item", {
+            "item-highlighted": index === highlightIndex
+          });
           return (
-            <li key={index} onClick={() => handleSelect(item)}>
+            <li key={index} className={cnames} onClick={() => handleSelect(item)}>
               {renderTemplate(item)}
             </li>
           );
@@ -75,6 +116,7 @@ const AutoComplete: React.FC<AutoCompleteProps> = (props) => {
       <Input
         value={inputValue}
         onChange={handleChange}
+        onKeyDown={handleKeyDown}
         {...restProps}
       />
       {loading && <ul><Icon icon={"spinner"} spin/></ul>}
