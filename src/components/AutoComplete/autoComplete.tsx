@@ -1,8 +1,9 @@
-import React, {ChangeEvent, ReactElement, useEffect, useState, KeyboardEvent} from "react";
+import React, {ChangeEvent, ReactElement, useEffect, useState, KeyboardEvent, useRef} from "react";
 import Input, {InputProps} from "../Input/input";
 import Icon from "../Icon";
 import useDebounce from "../../hooks/useDebounce";
 import classNames from "classnames";
+import useClickOutside from "../../hooks/useClickOutside";
 
 interface DataSourceObject {
   value: string;
@@ -22,10 +23,18 @@ const AutoComplete: React.FC<AutoCompleteProps> = (props) => {
   const [suggestions, setSuggestions] = useState<DataSourceType[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [highlightIndex, setHighlightIndex] = useState(-1);
+  // useState 会引起组件重新渲染，所以使用useRef
+  // ref 数据取值要使用 .current
+  const triggerSearch = useRef(false); // 控制搜索
+  const componentRef = useRef<HTMLDivElement>(null); // 控制搜索栏隐藏
   // 自定义 hooks， 使用 useEffect 防抖
   const debouncedValue = useDebounce(inputValue, 500);
+  // 点击别处，隐藏选择栏
+  useClickOutside(componentRef, () => {
+    setSuggestions([]);
+  });
   useEffect(() => {
-    if (debouncedValue) {
+    if (debouncedValue && triggerSearch.current) {
       const results = fetchSuggestions(inputValue);
       // 支持异步
       if (results instanceof Promise) {
@@ -84,12 +93,14 @@ const AutoComplete: React.FC<AutoCompleteProps> = (props) => {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.trim();
     setInputValue(value);
+    triggerSearch.current = true;
 
   };
   const handleSelect = (item: DataSourceType) => {
     setInputValue(item.value); // input 框内容填充为选择的内容
     setSuggestions([]); // 将下方选择内容清空
     onSelect?.(item); // 将内容传递给用户
+    triggerSearch.current = false;
   };
   const renderTemplate = (item: DataSourceType) => {
     return renderOption ? renderOption(item) : item.value;
@@ -112,7 +123,7 @@ const AutoComplete: React.FC<AutoCompleteProps> = (props) => {
   };
 
   return (
-    <div className={"genshin-auto-complete"}>
+    <div className={"genshin-auto-complete"} ref={componentRef}>
       <Input
         value={inputValue}
         onChange={handleChange}
