@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import Button from "./components/Button/button";
 import Menu from "./components/Menu/menu";
 import MenuItem from "./components/Menu/menuItem";
@@ -8,6 +8,8 @@ import {library} from "@fortawesome/fontawesome-svg-core";
 import {fas} from "@fortawesome/free-solid-svg-icons";
 import Input from "./components/Input/input";
 import AutoComplete from "./components/AutoComplete/autoComplete";
+import axios from "axios";
+import Upload from "./components/Upload/upload";
 
 library.add(fas);
 
@@ -42,10 +44,10 @@ function App() {
     return fetch(`https://api.github.com/search/users?q=${query}`)
       .then(res => res.json())
       .then(({items}) => {
-        console.log(items)
-        return items.slice(0, 10).map((item: any) => ({value: item.login, ...item}))
-      })
-  }
+        console.log(items);
+        return items.slice(0, 10).map((item: any) => ({value: item.login, ...item}));
+      });
+  };
   // const renderOption = (item: DataSourceType) => {
   //   return (
   //     <>
@@ -53,9 +55,28 @@ function App() {
   //     </>
   //   )
   // }
+
+  const [title, setTitle] = useState("");
+  const postData = {
+    title: "my title",
+    body: "hello man"
+  };
+  useEffect(() => {
+    axios.post("https://jsonplaceholder.typicode.com/posts", postData)
+      .then(res => {
+        console.log(res);
+        setTitle(res.data.title);
+      });
+  });
   return (
     <div className="App">
       <header className="App-header">
+        <Upload
+          action={"https://jsonplaceholder.typicode.com/posts/"}
+        />
+
+
+        {title}
         <AutoComplete
           onSelect={(item) => console.log(item)}
           fetchSuggestions={handleFetch}/>
