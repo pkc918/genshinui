@@ -68,14 +68,50 @@ function App() {
         setTitle(res.data.title);
       });
   });
+  // const checkFileSize = (file: File) => {
+  //   if (Math.round(file.size / 1024) > 50) {
+  //     alert("file too big");
+  //     return false;
+  //   }
+  //   return true;
+  // };
+  // const filePromise = (file: File) => {
+  //   const newFile = new File([file], "new_name.docx", {type: file.type});
+  //   return Promise.resolve(newFile);
+  // };
+  const handleChange = (file: File) => {
+    console.log(file);
+  };
+
+  const defaultFileList = [
+    {uid: "123", size: 1234, name: "hello.md", status: "uploading", percent: 30},
+    {uid: "122", size: 1234, name: "xyz.md", status: "success", percent: 30},
+    {uid: "121", size: 1234, name: "eyiha.md", status: "error", percent: 30}
+  ];
+
+  const args = {
+    action: "http://192.168.1.13:3000/upload",
+    // beforeUpload: filePromise,
+    defaultFileList: defaultFileList,
+    style: {width: "500px"},
+    name: "fileName",
+    data: {"key": "value"},
+    headers: {"X-Powered-By": "genshinui"},
+    accept: ".pdf",
+    multiple: true,
+    drag: true
+  };
   return (
     <div className="App">
+
       <header className="App-header">
         <Upload
-          action={"https://jsonplaceholder.typicode.com/posts/"}
-        />
-
-
+          drag={true}
+          action={"https://www.mocky.io/v2/5cc8019d300000980a055e76"}>
+          <Icon icon="upload" size="5x" theme="secondary"/>
+          <br/>
+          <p>Drag file over to upload</p>
+        </Upload>
         {title}
         <AutoComplete
           onSelect={(item) => console.log(item)}
