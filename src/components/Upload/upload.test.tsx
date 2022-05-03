@@ -30,7 +30,7 @@ const testFile = new File(['xyz'], 'test.png', {type: 'image/png'});
 describe('test upload component', () => {
   beforeEach(() => {
     wrapper = render(<Upload {...testProps}>Click to upload</Upload>)
-    fileInput = wrapper.container.querySelector('.viking-file-input') as HTMLInputElement
+    fileInput = wrapper.container.querySelector('.genshin-file-input') as HTMLInputElement
     uploadArea = wrapper.getByText('Click to upload')
   })
   it('upload process should works fine', async () => {
